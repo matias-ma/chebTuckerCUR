@@ -266,7 +266,7 @@ def _build_tucker_factor_chebfun(
 
         col_funs = [make_raw_entry(b) for b in range(r)]
 
-    cheb_row = tuple(cj.chebfun(entry, domain=[a_k, b_k]) for entry in col_funs)
+    cheb_row = tuple(cj.chebfun(entry, domain=[a_k, b_k], eps=opts.cheb_tol, splitting=True) for entry in col_funs)
     core = ChebfunMatrixCore(entries=(cheb_row,), domain=(float(a_k), float(b_k)))
     return core, {
         "representation": "scalar_chebfuns",
