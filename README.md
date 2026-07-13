@@ -221,6 +221,6 @@ realized exactly through the prefix table, every stage evaluator is simply
 `TuckerQRProjectedFunction`/`TuckerQRDenseProjectedFunction` chaining classes.
 
 ## Current problems
-We are currently choosing the pivots very poorly. It just samples `n_starts` points and pivots on the argmax of those. I have been working on porting the pivot optimization scheme from chebttcur and it's working but only on functions fully written in Jax, so I am working on generalizing it a bit.
+If you want to use the gradient descent in the pivot selection (i.e. `gd_steps>0`) the function needs to be written in JAX, as it relies on autodiff. There is probably a better way to do pivot selection than just selecting random points even when you can't use gradient descent.
 
 There is some strange thing that seems to be happenning with the default `factor_representation="scalar_cheb"`. When one tries to approximate a difficult function, when you increase the rank to bring down the max-error, once you get to $\approx0.01$, there is some rank value at which the algorithm just stalls (e.g. I have seen it take ~100 seconds at rank 19 and then run indefinitely for rank 20). If one sets `factor_representation="coeff_tensor"` this issue is resolved. Further, with `factor_representation="coeff_tensor"` one can just recover the univariate chebfuns by a simple bit of code. So I think it could make sense just to remove this option, only do the `factor_representation="coeff_tensor"`, and output the chebfun resolved version of this.
