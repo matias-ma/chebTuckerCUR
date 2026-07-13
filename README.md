@@ -39,9 +39,8 @@ continuous optimization, at each of up to $r$ greedy rounds:
 
 1. `sampling.sample_stage_points` draws `opts.n_starts` points $(x,\boldsymbol{y})$ — a mix
    of uniform points, boundary-biased points, and a few deterministic corners/face
-   midpoints (only for remaining dimension $\le 3$).
-2. `sampling.expand_samples_over_prefix_indices` pairs every sample with every existing
-   discrete prefix, giving a candidate pool of size `n_starts * r_prev`.
+   midpoints (only for remaining dimension $\le 3$). These are then refined by using `opts.gd_steps`
+   steps of gradient descent (see current problems for a comment on this).
 3. `residual.tucker_batch_residual_eval` evaluates $e_k$ at every candidate (or $F_k$
    itself for the first pivot of a stage) via the closed-form cross residual
    $e = F - Y\,U\,C$, not by literally chaining the rank-1 update above. The candidate
